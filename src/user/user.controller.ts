@@ -1,4 +1,4 @@
-import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, Post, Put } from "@nestjs/common";
+import { Body, Controller, Delete, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Put } from "@nestjs/common";
 import { User } from "./user.model";
 import { UserService } from "./user.service";
 import { ApiBody } from "@nestjs/swagger";
@@ -13,8 +13,8 @@ export class UserController{
         return this.service.getAll();
     }
 
-    @Get("/find-by-id")
-    async getUserById(@Param("user") id: number){
+    @Get("/find-by-id/:id")
+    async getUserById(@Param("id", ParseIntPipe) id: number){
         return this.service.getUserById(id);
     }
 
@@ -29,14 +29,14 @@ export class UserController{
         return this.service.createUser(data);
     }
 
-    @Put("/update")
+    @Put("/update/:id")
     @ApiBody({type: User})
-    async updateUser(@Param("id") id: number, @Body() data: User){
+    async updateUser(@Param("id", ParseIntPipe) id: number, @Body() data: User){
         return this.service.update(id, data);
     }
 
-    @Delete("/delete")
-    async deleteUser(@Param("id") id: number){
+    @Delete("/delete/:id")
+    async deleteUser(@Param("id", ParseIntPipe) id: number){
         return this.service.delete(id);
     }
 }
